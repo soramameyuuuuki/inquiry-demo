@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#163f35">
+  <meta name="description" content="問い合わせと担当者、対応状況をひとつの画面で管理するローカル試作品。">
+  <title>問い合わせ管理 | tsunagu</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="script.js" defer></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="index.html" aria-label="tsunagu ホーム"><span class="brand-icon" aria-hidden="true">t<span>・</span></span><span>tsunagu<small>INQUIRY MANAGEMENT</small></span></a>
+    <div class="workspace-label">ワークスペース</div>
+    <div class="nav-current"><span aria-hidden="true">▦</span> 問い合わせ管理 <span class="nav-dot"></span></div>
+    <div class="sidebar-bottom"><span class="local-symbol" aria-hidden="true">◇</span><div>ローカルワークスペース<small>このブラウザーにデータを保存</small></div></div>
+  </aside>
+
+  <div class="app-shell">
+    <header class="topbar"><div>ワークスペース <span>/</span> <strong>問い合わせ管理</strong></div><span class="prototype"><i></i> PROTOTYPE</span></header>
+    <main>
+      <div class="page-heading"><div><p class="eyebrow">INQUIRY OVERVIEW</p><h1>問い合わせ管理</h1><p class="subtitle">一つひとつの声に、確かな対応を。</p></div><button class="button button-primary" id="open-create" type="button"><span aria-hidden="true">＋</span> 問い合わせを登録</button></div>
+
+      <section aria-labelledby="overview-heading"><div class="section-heading"><h2 id="overview-heading">対応状況のサマリー</h2><span id="today"></span></div>
+        <div class="stats">
+          <div class="stat-card total"><div class="stat-label">すべての問い合わせ <span aria-hidden="true">▤</span></div><div class="stat-number"><span id="count-all">0</span><small>件</small></div><p>登録されている問い合わせの総数</p></div>
+          <div class="stat-card"><div class="stat-label"><span class="status-dot pending"></span>未対応</div><div class="stat-number"><span id="count-pending">0</span><small>件</small></div><p>これから対応する問い合わせ</p></div>
+          <div class="stat-card"><div class="stat-label"><span class="status-dot active"></span>対応中</div><div class="stat-number"><span id="count-active">0</span><small>件</small></div><p>担当者が対応を進めています</p></div>
+          <div class="stat-card"><div class="stat-label"><span class="status-dot done"></span>完了</div><div class="stat-number"><span id="count-done">0</span><small>件</small></div><p>対応が完了した問い合わせ</p></div>
+        </div>
+      </section>
+
+      <section class="list-panel" aria-labelledby="list-heading">
+        <div class="list-title"><div><h2 id="list-heading">問い合わせ一覧 <span id="list-total">0</span></h2><p>担当者と対応状況を確認・更新できます。</p></div><span class="sort-label">受付日の新しい順 ↓</span></div>
+        <div class="list-toolbar"><div class="filters" role="group" aria-label="対応状況で絞り込み"><button type="button" class="filter selected" data-filter="all" aria-pressed="true">すべて <span>0</span></button><button type="button" class="filter" data-filter="未対応" aria-pressed="false">未対応 <span>0</span></button><button type="button" class="filter" data-filter="対応中" aria-pressed="false">対応中 <span>0</span></button><button type="button" class="filter" data-filter="完了" aria-pressed="false">完了 <span>0</span></button></div><span id="visible-count">0件を表示</span></div>
+        <div class="table-wrap"><table><thead><tr><th scope="col">受付日</th><th scope="col">問い合わせ内容</th><th scope="col">担当者</th><th scope="col">対応状況</th><th scope="col"><span class="sr-only">操作</span></th></tr></thead><tbody id="inquiry-list"></tbody></table></div>
+        <div class="empty-state" id="empty-state"><div class="empty-icon" aria-hidden="true">▤</div><h3 id="empty-title">問い合わせはまだありません</h3><p id="empty-description">「問い合わせを登録」から、最初の1件を追加しましょう。</p></div>
+        <div class="list-footer"><span><span aria-hidden="true">↳</span> 対応状況は一覧から変更できます</span><span>ブラウザー内に保存</span></div>
+      </section>
+      <footer class="page-footer"><span>tsunagu <span class="footer-divider">/</span> 小さなチームの、確かな連携。</span><span>試作品 · 実際の顧客情報は入力しないでください</span></footer>
+      <p class="storage-note">保存先はこの端末・ブラウザーのみです。ブラウザーのデータを消去すると、登録内容も削除されます。</p>
+      <div id="feedback" class="feedback" role="status" aria-live="polite" hidden></div>
+    </main>
+  </div>
+
+  <dialog id="create-dialog" aria-labelledby="create-title">
+    <form id="inquiry-form"><div class="dialog-header"><div><p class="eyebrow">NEW INQUIRY</p><h2 id="create-title">問い合わせを登録</h2></div><button type="button" class="icon-button" id="close-create" aria-label="登録画面を閉じる">×</button></div>
+      <p class="dialog-description">問い合わせ内容と担当者を入力してください。<br>デモ用の架空の情報をご利用ください。</p>
+      <label for="received-date">受付日 <span class="required">必須</span></label><input type="date" id="received-date" name="receivedDate" required>
+      <label for="inquiry-content">問い合わせ内容 <span class="required">必須</span></label><textarea id="inquiry-content" name="content" rows="4" maxlength="2000" placeholder="例：デモ製品の見積もりについて" required></textarea><small class="field-help">2,000文字以内で入力してください。</small>
+      <label for="assignee">担当者 <span class="required">必須</span></label><input type="text" id="assignee" name="assignee" maxlength="50" placeholder="例：デモ担当A" required>
+      <label for="initial-status">対応状況</label><select id="initial-status" name="status"><option>未対応</option><option>対応中</option><option>完了</option></select>
+      <p id="form-error" class="form-error" role="alert" hidden></p>
+      <div class="dialog-actions"><button type="button" class="button button-secondary" id="cancel-create">キャンセル</button><button type="submit" class="button button-primary">登録する</button></div>
+    </form>
+  </dialog>
+
+  <dialog id="delete-dialog" aria-labelledby="delete-title"><div class="delete-body"><span class="delete-symbol" aria-hidden="true">!</span><h2 id="delete-title">問い合わせを削除しますか？</h2><p id="delete-preview"></p><p class="delete-warning">削除したデータは元に戻せません。</p><p id="delete-error" class="form-error" role="alert" hidden></p><div class="dialog-actions"><button type="button" class="button button-secondary" id="cancel-delete" autofocus>キャンセル</button><button type="button" class="button button-danger" id="confirm-delete">削除する</button></div></div></dialog>
+</body>
+</html>
